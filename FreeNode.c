@@ -9,6 +9,7 @@ FreeNode* addNode (FreeNode* headNode, void* ptr)
 	FreeNode* nextNode = headNode;
 	FreeNode* newNode  = (FreeNode*)ptr;
 
+	// Search for node before and after the address of ptr
 	while (nextNode != NULL)
 	{
 		if (nextNode < newNode)      prevNode = nextNode;
@@ -22,6 +23,7 @@ FreeNode* addNode (FreeNode* headNode, void* ptr)
 	newNode->next = nextNode;
 	newNode->prev = prevNode;
 
+	// Merge to nodes above and below if possible
 	if (mergeNodes(prevNode, newNode) != -1) newNode = prevNode;
 	mergeNodes(newNode, nextNode);
 
@@ -72,6 +74,7 @@ FreeNode* splitNode(FreeNode* node, size_t size)
 		shift = sizeof(FreeNode);
 	}
 	
+	// Create new node after split
 	FreeNode* newFree = (void*)node + shift;
 
 	newFree->size = node->size - shift;

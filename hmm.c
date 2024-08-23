@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 #include "FreeNode.h"
 
 #define PAGE_SIZE 0x1000
@@ -123,5 +124,51 @@ void HmmFree(void* ptr)
 			if (freeTail != NULL) freeTail->size -= (nEmpty - 2) * PAGE_SIZE;
 		}
 	}
+}
+
+
+
+
+/////////// Redefinitions ///////////
+
+void* malloc(size_t size)
+{
+	return HmmAlloc(size);
+}
+
+
+void free(void* ptr)
+{
+	HmmFree(ptr);
+}
+
+void* calloc(size_t nmemb, size_t size)
+{
+	void* newMem = malloc(nmemb * size);
+	if (newMem != NULL) memset(newMem, 0, nmemb * size);
+
+	return newMem;
+}
+
+void* realloc(void* ptr, size_t size)
+{
+	void* newMem = NULL;
+
+	if (ptr == NULL)
+	{
+		newMem = malloc(size);
+	}
+	else if (size == 0 && ptr != NULL)
+	{
+		free(ptr);
+	}
+	else
+	{
+		newMem = malloc(size);
+		memcpy(newMem, ptr, size);
+		free(ptr);
+	}
+
+	return newMem;
 }
 
