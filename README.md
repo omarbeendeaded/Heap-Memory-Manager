@@ -15,9 +15,9 @@ Frees the block that `ptr` points to so it can be reused for other allocations
 ## void* getProgramBreak()
 Returns the address of the current program break
 
-
 ## test.c
 A program to test the integrity of the code by allocating and freeing blocks randomly several times 
-### Compilation
-```gcc test.c hmm.c -o test```
+
+### Creating lib
+```gcc -g -fPIC -Wall hmm.c FreeNode.c -shared -o libhmm.so```
 
