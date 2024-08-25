@@ -35,6 +35,9 @@ void* HmmAlloc(size_t size)
 {
 	initHeap(); // Init if empty
 	
+	// Alignment
+	if (size % 8 != 0) size = ((size + 7) / 8) * 8;
+	
 	// Check for available free node //
 	FreeNode* searchNode = freeHead;
 	while (searchNode != NULL)
@@ -133,17 +136,20 @@ void HmmFree(void* ptr)
 
 void* malloc(size_t size)
 {
+	// write(1, "alloc\n", 6);
 	return HmmAlloc(size);
 }
 
 
 void free(void* ptr)
 {
+	// write(1, "free\n", 5); 
 	HmmFree(ptr);
 }
 
 void* calloc(size_t nmemb, size_t size)
 {
+	// write(1, "calloc\n", 7);
 	void* newMem = malloc(nmemb * size);
 	if (newMem != NULL) memset(newMem, 0, nmemb * size);
 
@@ -152,6 +158,7 @@ void* calloc(size_t nmemb, size_t size)
 
 void* realloc(void* ptr, size_t size)
 {
+	// write(1, "realloc\n", 8);
 	void* newMem = NULL;
 
 	if (ptr == NULL)
